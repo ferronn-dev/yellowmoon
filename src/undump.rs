@@ -36,7 +36,7 @@ struct Function {
 trait LuacBuf: Buf {
     fn get_string(&mut self) -> Result<String> {
         ensure!(self.remaining() >= 8, "truncated string length");
-        let len: usize = self.get_u64_le().try_into()?;
+        let len = self.get_u64_le().try_into()?;
         ensure!(self.remaining() >= len, "truncated string contents");
         let str = if len == 0 {
             "".to_owned()
@@ -55,7 +55,7 @@ trait LuacBuf: Buf {
         let num_params = self.get_u8();
         let is_vararg = self.get_u8();
         let maxstacksize = self.get_u8();
-        let codelen: usize = self.get_u32_le().try_into()?;
+        let codelen = self.get_u32_le().try_into()?;
         ensure!(
             self.remaining() >= codelen * 4 + 4,
             "truncated function code"
