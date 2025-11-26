@@ -2,7 +2,7 @@ use anyhow::{Ok, Result, bail, ensure};
 use bytes::Buf;
 
 #[derive(Debug, PartialEq)]
-enum Constant {
+pub enum Constant {
     Nil,
     Boolean(bool),
     Number(f64),
@@ -10,14 +10,14 @@ enum Constant {
 }
 
 #[derive(Debug, PartialEq)]
-struct LocVar {
+pub struct LocVar {
     varname: String,
     startpc: u32,
     endpc: u32,
 }
 
 #[derive(Debug, PartialEq)]
-struct Function {
+pub struct Function {
     source: String,
     line_defined: u32,
     last_line_defined: u32,
@@ -139,7 +139,7 @@ trait LuacBuf: Buf {
 }
 impl LuacBuf for &[u8] {}
 
-pub(crate) fn undump(data: &[u8]) -> Result<Function> {
+pub fn undump(data: &[u8]) -> Result<Function> {
     let mut p = data;
     ensure!(p.remaining() >= 12, "truncated header");
     ensure!(p.get_u32().to_be_bytes() == *b"\x1bLua", "bad signature");
